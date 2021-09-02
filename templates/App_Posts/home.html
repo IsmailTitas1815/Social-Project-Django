@@ -1,0 +1,139 @@
+{% extends 'navbar.html' %} {% block title_block %}{{title}} 
+{% endblock title_block %} {% block css_block %}{% endblock css_block %} 
+{% block body_block %} {% if search %} {% for user in result %}
+<div class="row">
+  <div class="col-sm-2">
+    {% if user.user_profile.profile_pic %}
+
+    <img
+      src="/media/{{user.user_profile.profile_pic}}"
+      width="75px"
+      alt="image"
+      class="rounded-circle"
+      height="75px"
+    />
+
+    {% else %}
+
+    <img
+      src="/media/dp.jpg"
+      width="75px"
+      alt="image"
+      class="rounded-circle"
+      height="75px"
+    />
+
+    {% endif %}
+  </div>
+
+  <div class="col-sm-10">
+    <a href="{% url 'App_Login:user' username=user.username %}">
+      {{user.username}}</a
+    >
+
+    <br />
+    {{user.user_profile.full_name}}
+  </div>
+</div>
+
+{% endfor %} {% else %} 
+
+
+<div class="row">
+<div class="col-sm-8">
+
+
+  {% for post in posts %}
+
+<div style="border: 1px solid #888888">
+  <div style="padding: 10px">
+    {% if post.author.user_profile.profile_pic %}
+
+    <img
+      src="/media/{{post.author.user_profile.profile_pic}}"
+      width="40px"
+      alt="image"
+      class="rounded-circle"
+      height="40px"
+    />
+
+    {% else %}
+
+    <img
+      src="/media/dp.jpg"
+      width="40px"
+      alt="image"
+      class="rounded-circle"
+      height="40px"
+    />
+
+    {% endif %}
+  </div>
+  <a href="{% url 'App_Login:user' username=post.author.username %}"
+    >{{post.author}}</a>
+
+  <br />
+  <br />
+
+  <img src="/media/{{post.image}}" alt="" width="100%" />
+ 
+  <div style="padding:20px">
+  {{post.caption}} <br>
+{{post.liked_post.count}} Likes <br>
+{% if post.pk in liked_post_list %}
+
+<a href="{% url 'App_Posts:unliked' pk=post.pk %}"> <i class="fas fa-heart" style="font-size:36px"></i></a>
+
+{% else %}
+<a href="{% url 'App_Posts:liked' pk=post.pk %}">
+<i class="far fa-heart" style="font-size:36px" ></i>
+</a>
+{% endif %}
+  </div>
+  <br>
+  <br>
+</div>
+{% endfor %}
+
+</div>
+<div class="col-sm-4">
+<div class="row">
+
+<div class="col-sm-4">
+
+    {% if user.user_profile.profile_pic %}
+
+    <img
+      src="/media/{{user.user_profile.profile_pic}}"
+      width="75px"
+      alt="image"
+      class="rounded-circle"
+      height="75px"
+    />
+
+    {% else %}
+
+    <img
+      src="/media/dp.jpg"
+      width="75px"
+      alt="image"
+      class="rounded-circle"
+      height="75px"
+    />
+
+    {% endif %}
+
+
+</div>
+
+<div class="col-sm-8">
+{{user.username}}
+{{user.user_profile.full_name}}
+</div>
+</div>
+
+</div>
+
+</div>
+
+ {% endif %} {% endblock body_block %}

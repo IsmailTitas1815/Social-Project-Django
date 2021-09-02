@@ -1,0 +1,108 @@
+{% extends 'navbar.html' %} {% block title_block%}
+{% load crispy_forms_tags %}
+{{user.user_profile.full_name}} (@{{user.username}}) 
+{% endblock title_block%} 
+{% block css_block %}
+
+<style>
+.crop{
+  height:200px;
+  width:200px;
+  overflow:hidden;
+}
+
+.crop img{
+  width:400px;
+  height:300px;
+  margin:-75px 0 0 -100px;
+}
+
+</style>
+
+{% endblock css_block %} {% block body_block %}
+
+
+<div class="row">
+  <div class="col-sm-4">
+    {% if user.user_profile.profile_pic %}
+    <img
+      src="/media/{{user.user_profile.profile_pic}}"
+      width="250px"
+      alt="image"
+      class="rounded-circle"
+      height="250px"
+    />
+    {% else %}
+    <img
+      src="/media/dp.jpg"
+      width="250px"
+      alt="image"
+      class="rounded-circle"
+      height="250px"
+    />
+    {% endif %}
+  </div>
+
+  <div class="col-sm-8">
+  <h3> {{user.username}} &nbsp; <a href="{% url 'App_Login:edit' %}" class="btn btn-light">Edit Profile</a> </h3>
+  <br>
+  <h4>{{user.post.count}} Posts &nbsp; &nbsp; {{user.following.count}} followers &nbsp; &nbsp; 
+  {{user.follower.count}} following </h4>
+  <br>
+  <h4>{{user.user_profile.full_name}}</h4>
+  <h6>{{user.user_profile.description|linebreaks}}</h6>
+  </div>
+</div>
+
+<hr>
+
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+  Add Post
+</button>
+
+<!-- The Modal -->
+<div class="modal" id="myModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Post a Photo</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form method="POST" enctype ="multipart/form-data">
+        {{form|crispy}}
+        {% csrf_token %}
+        <button type="Submit">Post</button>
+        </form>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<br>
+<br>
+
+<div class="row">
+
+{% for post in user.post.all %}
+<div class="crop">
+<img src="/media/{{post.image}}" title="{{post.caption}}">
+
+</div>
+
+{% endfor %}
+</div>
+
+{% endblock body_block %}
